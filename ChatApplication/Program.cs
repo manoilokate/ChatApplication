@@ -1,5 +1,7 @@
 using ChatApplication.Client.Pages;
 using ChatApplication.Components;
+using Microsoft.AspNetCore.ResponseCompression;
+using ChatApplication.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddSignalR();
+
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        ["application/octet-stream"]);
+});
+
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -29,5 +41,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(ChatApplication.Client._Imports).Assembly);
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
