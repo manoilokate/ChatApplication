@@ -9,6 +9,11 @@
       "type": "signalr",
       "connectionId": "Azure:SignalR:ConnectionString",
       "dynamicId": null
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionString:Chat:SqlDb",
+      "dynamicId": null
     }
   }
 }

@@ -15,6 +15,14 @@
       "type": "signalr.azure",
       "connectionId": "Azure:SignalR:ConnectionString",
       "dynamicId": null
+    },
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.ServiceLinker/locations/northeurope/connectors/ConnectionStringChatSqlDb_7077711C24",
+      "secretStore": "LocalSecretsFile",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/sqlserver-chat-dev-001/databases/sqldb-chat-001",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionString:Chat:SqlDb",
+      "dynamicId": null
     }
   }
 }

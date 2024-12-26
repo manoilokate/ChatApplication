@@ -2,6 +2,7 @@
 
 namespace ChatApplication.Data
 {
+    // Db that inheriting DbContext(options) 
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)

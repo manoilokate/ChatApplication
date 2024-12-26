@@ -6,35 +6,41 @@ using System;
 using ChatApplication.Data;
 using System.Diagnostics;
 using ChatApplication.Services;
+using ChatApplication.Hubs;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (builder.Environment.IsDevelopment())
+// Use user secrets in development
+if (builder.Environment.IsDevelopment()) 
 {
     builder.Configuration.AddUserSecrets<Program>();
 }
 
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
+// Add SignalR service
+builder.Services.AddSignalR(); 
 
-builder.Services.AddSignalR();
-
+// Add response compression
 builder.Services.AddResponseCompression(opts =>
 {
     opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
     new[] { "application/octet-stream" });
 });
 
+// String for connection to db
 var sqlConnection = builder.Configuration["Chat:SqlDb"];
 
-builder.Services.AddSqlServer<ApplicationDbContext>(sqlConnection, 
+builder.Services.AddSqlServer<ApplicationDbContext>(sqlConnection,
     options => options.EnableRetryOnFailure());
 
+// Add ChatService
 builder.Services.AddScoped<ChatService>();
 
 var app = builder.Build();
 
+// Add migration to db in Azure
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -61,6 +67,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(ChatApplication.Client._Imports).Assembly);
 
+// Add SignalR hub
 app.MapHub<ChatHub>("/chathub");
 
 app.Run();

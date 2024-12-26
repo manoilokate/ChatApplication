@@ -12,14 +12,16 @@ namespace ChatApplication.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<ChatMessage>> GetChatHistoryAsync()
+        // Return the history of chat that is saved in db and order by date
+        public async Task<List<ChatMessage>> GetChatHistoryAsync() 
         {
             return await _dbContext.ChatMessages
                 .OrderByDescending(m => m.Date)
                 .ToListAsync();
         }
 
-        public async Task AddMessageAsync(ChatMessage message)
+        // Add message to db
+        public async Task AddMessageAsync(ChatMessage message) 
         {
             _dbContext.ChatMessages.Add(message);
             await _dbContext.SaveChangesAsync();

@@ -1,4 +1,4 @@
-﻿@page "/chat"
+﻿@page "/"
 @rendermode InteractiveWebAssembly
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager Navigation
@@ -38,12 +38,13 @@
 </ul>
 
 @code {
-    private HubConnection? hubConnection;
-    private List<string> messages = [];
-    private string? userInput;
-    private string? messageInput;
+    private HubConnection? hubConnection; // SignalR connection
+    private List<string> messages = []; // List of messages
+    private string? userInput; // Username
+    private string? messageInput; // Message
 
-    protected override async Task OnInitializedAsync()
+    // Initialize SignalR connection
+    protected override async Task OnInitializedAsync() 
     {
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/chathub"))
@@ -59,7 +60,8 @@
         await hubConnection.StartAsync();
     }
 
-    private async Task Send()
+    // Send message and then clear the input
+    private async Task Send() 
     {
         if (hubConnection is not null)
         {
@@ -67,10 +69,11 @@
             messageInput = string.Empty;
         }
     }
-
+    // Check connectiot with SignalR
     public bool IsConnected =>
-        hubConnection?.State == HubConnectionState.Connected;
+        hubConnection?.State == HubConnectionState.Connected; 
 
+    // Dispose SignalR connection
     public async ValueTask DisposeAsync()
     {
         if (hubConnection is not null)

@@ -2,6 +2,7 @@
 
 namespace ChatApplication.Data
 {
+    // The table in db with fields - IdMessage, UserName, Message, Date
     public class ChatMessage
     {
         [Key]

@@ -2,31 +2,33 @@
 using ChatApplication.Services;
 using Microsoft.AspNetCore.SignalR;
 
-public class ChatHub : Hub
+namespace ChatApplication.Hubs
 {
-    private readonly ChatService _chatService;
-
-    public ChatHub(ChatService chatService)
+    public class ChatHub : Hub
     {
-        _chatService = chatService;
-    }
-
-    public async Task<List<ChatMessage>> GetChatHistory()
-    {
-        return await _chatService.GetChatHistoryAsync();
-    }
-
-    public async Task SendMessage(string user, string message)
-    {
-        var chatMessage = new ChatMessage
+        private readonly ChatService _chatService;
+        public ChatHub(ChatService chatService)
         {
-            UserName = user,
-            Message = message,
-            Date = DateTime.Now
-        };
+            _chatService = chatService;
+        }
 
-        await _chatService.AddMessageAsync(chatMessage);
-        await Clients.All.SendAsync("ReceiveMessage", user, message);
+        // Return the history of chat
+        public async Task<List<ChatMessage>> GetChatHistory() 
+        {
+            return await _chatService.GetChatHistoryAsync();
+        }
+
+        // Send message to chat
+        public async Task SendMessage(string userName, string message) 
+        {
+            var chatMessage = new ChatMessage
+            {
+                UserName = userName,
+                Message = message,
+                Date = DateTime.Now
+            };
+            await _chatService.AddMessageAsync(chatMessage);
+            await Clients.All.SendAsync("ReceiveMessage", userName, message);
+        }
     }
-    
 }
