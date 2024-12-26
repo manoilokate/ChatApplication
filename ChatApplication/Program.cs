@@ -30,7 +30,7 @@ builder.Services.AddResponseCompression(opts =>
 });
 
 // String for connection to db
-var sqlConnection = builder.Configuration["Chat:SqlDb"];
+var sqlConnection = builder.Configuration["ConnectionStrings:Chat:SqlDb"];
 
 builder.Services.AddSqlServer<ApplicationDbContext>(sqlConnection,
     options => options.EnableRetryOnFailure());
